@@ -10,29 +10,36 @@ export default function NewPostModal({ onClose }) {
   const [file, setFile] = useState(null);
   const [caption, setCaption] = useState('');
 
-  const handleFileChange = async (e) => {
+ const handleFileChange = async (e) => {
   const selected = e.target.files[0];
   if (!selected) return;
 
   try {
+    console.log('Selected file type:', selected.type); // Debug line for Android issues
+
     let compressedFile = selected;
 
-    // Only compress JPEG/PNG
-    if (['image/jpeg', 'image/png'].includes(selected.type)) {
-      compressedFile = await imageCompression(selected, {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1024,
-        useWebWorker: true,
-      });
-    } else {
-      console.warn('Skipping compression for file type:', selected.type);
+    // Try compression only for supported image types
+    if (
+      selected.type === 'image/jpeg' ||
+      selected.type === 'image/jpg' ||
+      selected.type === 'image/png'
+    ) {
+      try {
+        compressedFile = await imageCompression(selected, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1024,
+          useWebWorker: true,
+        });
+      } catch (compressionError) {
+        console.warn('Image compression failed. Using original file.');
+      }
     }
 
     setFile(compressedFile);
   } catch (err) {
-    console.error('Compression failed:', err);
-    alert('Failed to compress image.');
-    setFile(selected); // fallback to original
+    console.error('File selection failed:', err);
+    alert('Selected image format might not be supported.');
   }
 };
 
