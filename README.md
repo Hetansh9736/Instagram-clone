@@ -95,8 +95,8 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 
 # 👉 Cloudinary Config
-VITE_CLOUD_NAME=dfu7smvul
-VITE_UPLOAD_PRESET=unsigned_posts
+VITE_CLOUD_NAME=your_cloud_name
+VITE_UPLOAD_PRESET=your_upload_name
 ```
 
 > ⚠️ **DO NOT COMMIT** `.env` files to GitHub. Add `.env` to `.gitignore`.
