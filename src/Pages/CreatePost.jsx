@@ -12,10 +12,23 @@ const CreatePost = () => {
   const [caption, setCaption] = useState('');
   const navigate = useNavigate();
 
-  const handleFileChange = (e) => {
-    const selected = e.target.files[0];
-    if (selected) setFile(selected);
-  };
+ const handleFileChange = async (e) => {
+  const selected = e.target.files[0];
+  if (!selected) return;
+
+  try {
+    const compressedFile = await imageCompression(selected, {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1024,
+      useWebWorker: true,
+    });
+    setFile(compressedFile);
+  } catch (err) {
+    console.error('Compression failed:', err);
+    alert('Failed to compress image.');
+  }
+};
+
 
   const handlePost = () => {
     if (!file) {
