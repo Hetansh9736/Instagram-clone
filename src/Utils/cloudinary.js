@@ -8,13 +8,14 @@ export const uploadToCloudinary = async (file) => {
   const cloudName = import.meta.env.VITE_CLOUD_NAME;
 
   try {
-    const response = await axios.post(
+    const res = await axios.post(
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-      formData
+      formData,
+      { headers: { 'Content-Type': 'multipart/form-data' } }
     );
-    return response.data; 
-  } catch (error) {
-    console.error('Upload Error:', error);
-    throw error;
+    return res.data;
+  } catch (err) {
+    console.error('Cloudinary Upload Failed:', err.response?.data || err.message);
+    throw err;
   }
 };
