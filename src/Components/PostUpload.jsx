@@ -42,7 +42,7 @@ export default function NewPostModal({ onClose }) {
         <h2 className="text-white text-xl mb-4">Share to</h2>
         <input
           type="file"
-          accept="image/jpeg, image/png"
+          accept="image/*"
           onChange={handleFileChange}
           className="mb-4 text-white"
         />
