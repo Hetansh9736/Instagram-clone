@@ -2,49 +2,45 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createPost } from '../Redux/Actions/postActions';
 import { useNavigate } from 'react-router-dom';
+import imageCompression from 'browser-image-compression';
 
 const CreatePost = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const loading = useSelector((state) => state.post.loading);
+  const navigate = useNavigate();
 
   const [file, setFile] = useState(null);
   const [caption, setCaption] = useState('');
-  const navigate = useNavigate();
-const handleFileChange = async (e) => {
-  const selected = e.target.files[0];
-  if (!selected) return;
 
-  try {
-    let compressedFile = selected;
+  const handleFileChange = async (e) => {
+    const selected = e.target.files[0];
+    if (!selected) return;
 
-    // Only compress JPEG/PNG
-    if (['image/jpeg', 'image/png'].includes(selected.type)) {
-      compressedFile = await imageCompression(selected, {
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!validTypes.includes(selected.type)) {
+      alert('Only JPG and PNG images are allowed.');
+      return;
+    }
+
+    try {
+      const compressed = await imageCompression(selected, {
         maxSizeMB: 1,
         maxWidthOrHeight: 1024,
         useWebWorker: true,
       });
-    } else {
-      console.warn('Skipping compression for file type:', selected.type);
+      setFile(compressed);
+    } catch (err) {
+      console.warn('Compression failed, using original file.', err);
+      setFile(selected);
     }
-
-    setFile(compressedFile);
-  } catch (err) {
-    console.error('Compression failed:', err);
-    alert('Failed to compress image.');
-    setFile(selected); // fallback to original
-  }
-};
-
-
+  };
 
   const handlePost = () => {
     if (!file) {
       alert('Please select an image.');
       return;
     }
-
     if (!caption.trim()) {
       alert('Please write a caption.');
       return;
@@ -75,7 +71,7 @@ const handleFileChange = async (e) => {
           <label className="block text-gray-300">Select Image</label>
           <input
             type="file"
-            accept="image/*"
+            accept="image/jpeg, image/png"
             onChange={handleFileChange}
             className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
           />
