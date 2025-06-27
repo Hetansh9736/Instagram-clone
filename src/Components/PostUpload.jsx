@@ -12,22 +12,30 @@ export default function NewPostModal({ onClose }) {
 
   const handleFileChange = async (e) => {
   const selected = e.target.files[0];
-  if (!selected) return alert("No file selected");
+  if (!selected) return;
 
   try {
-    console.log("Original file size:", selected.size / 1024, "KB");
-    const compressedFile = await imageCompression(selected, {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1024,
-      useWebWorker: true,
-    });
-    console.log("Compressed file size:", compressedFile.size / 1024, "KB");
+    let compressedFile = selected;
+
+    // Only compress JPEG/PNG
+    if (['image/jpeg', 'image/png'].includes(selected.type)) {
+      compressedFile = await imageCompression(selected, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1024,
+        useWebWorker: true,
+      });
+    } else {
+      console.warn('Skipping compression for file type:', selected.type);
+    }
+
     setFile(compressedFile);
   } catch (err) {
-    console.error("Compression failed:", err);
-    alert("Failed to compress image.");
+    console.error('Compression failed:', err);
+    alert('Failed to compress image.');
+    setFile(selected); // fallback to original
   }
 };
+
 
 
   const handleSubmit = () => {
