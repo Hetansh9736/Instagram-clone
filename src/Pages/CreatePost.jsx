@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createPost } from '../Redux/Actions/postActions';
 import { useNavigate } from 'react-router-dom';
-import imageCompression from 'browser-image-compression';
 
 const CreatePost = () => {
   const dispatch = useDispatch();
@@ -13,7 +12,7 @@ const CreatePost = () => {
   const [file, setFile] = useState(null);
   const [caption, setCaption] = useState('');
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     const selected = e.target.files[0];
     if (!selected) return;
 
@@ -23,17 +22,7 @@ const CreatePost = () => {
       return;
     }
 
-    try {
-      const compressed = await imageCompression(selected, {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1024,
-        useWebWorker: true,
-      });
-      setFile(compressed);
-    } catch (err) {
-      console.warn('Compression failed, using original file.', err);
-      setFile(selected);
-    }
+    setFile(selected);
   };
 
   const handlePost = () => {
@@ -41,6 +30,7 @@ const CreatePost = () => {
       alert('Please select an image.');
       return;
     }
+
     if (!caption.trim()) {
       alert('Please write a caption.');
       return;
@@ -71,7 +61,7 @@ const CreatePost = () => {
           <label className="block text-gray-300">Select Image</label>
           <input
             type="file"
-            accept="image/jpeg, image/png"
+            accept="image/jpeg,image/png"
             onChange={handleFileChange}
             className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
           />
