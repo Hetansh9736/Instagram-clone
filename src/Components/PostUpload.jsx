@@ -11,21 +11,24 @@ export default function NewPostModal({ onClose }) {
   const [caption, setCaption] = useState('');
 
   const handleFileChange = async (e) => {
-    const selected = e.target.files[0];
-    if (!selected) return;
+  const selected = e.target.files[0];
+  if (!selected) return alert("No file selected");
 
-    try {
-      const compressedFile = await imageCompression(selected, {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1024,
-        useWebWorker: true,
-      });
-      setFile(compressedFile);
-    } catch (err) {
-      console.error('Compression failed:', err);
-      alert('Failed to compress image.');
-    }
-  };
+  try {
+    console.log("Original file size:", selected.size / 1024, "KB");
+    const compressedFile = await imageCompression(selected, {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1024,
+      useWebWorker: true,
+    });
+    console.log("Compressed file size:", compressedFile.size / 1024, "KB");
+    setFile(compressedFile);
+  } catch (err) {
+    console.error("Compression failed:", err);
+    alert("Failed to compress image.");
+  }
+};
+
 
   const handleSubmit = () => {
     if (!file) return alert('Select an image or video');
