@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import DashboardLayout from './Layout/DashboardLayout';
 import Dashboard from './Pages/Dashboard';
 import Profile from './Pages/Profile';
-import Search from './Pages/Search';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './Helper/Firebase';
 import { useDispatch } from 'react-redux';
