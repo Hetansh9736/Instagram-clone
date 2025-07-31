@@ -6,14 +6,14 @@ A fully functional **Instagram Clone** built using **React**, **Redux Toolkit**,
 
 🚀 Features
 
-- 🔐 User Authentication (Register / Login)
-- 📷 Upload images with captions
-- 👤 View personal profile with posts
-- 🗑️ Delete posts
-- 💬 Comment support
-- 🌐 Fully responsive design
-- ☁️ Cloudinary integration for image hosting
-- 🔥 Firebase Firestore for real-time data
+- User Authentication (Register / Login)
+- Upload images with captions
+- View personal profile with posts
+- Delete posts
+- Comment support
+- Fully responsive design
+- Cloudinary integration for image hosting
+- Firebase Firestore for real-time data
 
 ---
 
