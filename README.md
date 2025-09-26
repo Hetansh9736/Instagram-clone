@@ -53,6 +53,7 @@ Getting Started
 1. Install Dependencies
 npm install
 
+
 2. Set Up Environment Variables
 
 Create a .env file in the root directory:
